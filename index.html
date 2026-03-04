@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lqahi - Unified Page</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        /* ===== RESET & VARIABLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --dark-gray: #2c3e50;
+            --primary: rgb(41, 147, 179);
+            --primary-dark: #135fa1;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 2rem;
+        }
+        .col {
+            flex: 1 1 300px;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .title h2 {
+            font-size: 2.2rem;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+        }
+        .title img {
+            width: 60px;
+            margin: 0.5rem 0;
+        }
+        .title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        hr {
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+            border: none;
+            margin: 0.5rem 0 1rem;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .text-primary {
+            color: var(--primary);
+        }
+        .btn {
+            display: inline-block;
+            cursor: pointer;
+            padding: 10px 25px;
+            font-size: 14px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: aliceblue;
+            text-decoration: none;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* ===== HOME SECTION ===== */
+        #home .navbar {
+            position: fixed;
+            top: 0;
+            background-color: var(--primary);
+            width: 100%;
+            box-shadow: 0px 1px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        #home .navbar nav {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            align-items: center;
+            margin: auto;
+            padding: 0.5rem 1rem;
+        }
+        #home .navbar nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        #home .navbar nav ul a {
+            margin: 0 15px;
+            color: var(--dark-gray);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        #home .navbar nav ul a:hover {
+            color: white;
+        }
+        #home .navbar nav .linkhead {
+            border-radius: 5px;
+            background-color: white;
+            padding: 0.2rem 0;
+        }
+        #home .navbar nav .linkhead:hover {
+            color: var(--primary-dark);
+            background-color: black;
+        }
+        #home .navbar .logo {
+            width: 50px;
+        }
+        #home .home-content {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            margin-top: 60px;
+        }
+        #home .home-content .col {
+            width: 1200px;
+            margin: auto;
+            padding: 0 2rem;
+        }
+        #home .home-content .col h1 {
+            font-size: 40px;
+            max-width: 600px;
+            line-height: 1.4em;
+        }
+        #home .home-content .col p {
+            margin: 10px 0 30px;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+        #home .home-content .col a {
+            margin-right: 15px;
+        }
+        #home .home-content .col img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        #about {
+            padding: 80px 0;
+            background: var(--white);
+        }
+        #about .list {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        #about .list ul {
+            list-style: none;
+        }
+        #about .list ul li {
+            margin: 0.8rem 0;
+            font-size: 1rem;
+        }
+        #about .list ul li i {
+            color: var(--primary);
+            margin-right: 8px;
+        }
+        #about .col img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        /* ===== INFO SECTION ===== */
+        #info {
+            background: var(--primary);
+            color: white;
+            padding: 60px 0;
+        }
+        #info .row {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        #info .col {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+        #info .col i {
+            font-size: 3rem;
+        }
+        #info .col span {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+        #info .col p {
+            font-size: 1.1rem;
+        }
+
+        /* ===== SERVICES SECTION ===== */
+        #services {
+            padding: 80px 0;
+            background: var(--light-bg);
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--dark-gray);
+        }
+        .section-header p {
+            color: #666;
+        }
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .service-box {
+            background: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transition: 0.3s;
+            color: #333;
+        }
+        .service-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .service-box i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .service-box h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== HELP SECTION ===== */
+        #help {
+            padding: 80px 0;
+            background: white;
+        }
+        #help .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        #help .col {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        #help .col:hover {
+            background: var(--primary);
+            color: white;
+        }
+        #help .col i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        #help .col:hover i {
+            color: white;
+        }
+        #help .col h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== REVIEW SECTION ===== */
+        #review {
+            background: linear-gradient(rgba(41,147,179,0.9), rgba(41,147,179,0.9)), url('https://placehold.co/1920x600/1e3a8a/white?text=Health+Awareness') center/cover;
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+        #review .heading {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+        #review .heading span {
+            font-size: 4rem;
+            color: #ffd700;
+        }
+        #btn-review {
+            background: white;
+            color: var(--primary);
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        #btn-review:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        /* ===== MOTHERS TESTIMONIALS ===== */
+        .mothers-testimonials {
+            background-color: #f8fafc;
+            padding: 80px 0;
+        }
+        .section-title {
+            color: #1e3a8a;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 4px;
+            background: #3b82f6;
+            bottom: -10px;
+            left: 25%;
+            border-radius: 2px;
+        }
+        .section-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .testimonial-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(30, 58, 138, 0.1);
+            padding: 30px;
+            transition: all 0.3s ease;
+            border-top: 4px solid #3b82f6;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.15);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #dbeafe;
+            margin-right: 15px;
+        }
+        .user-info h4 {
+            margin: 0 0 5px 0;
+            color: #1e3a8a;
+            font-size: 1.1rem;
+        }
+        .stars {
+            color: #f59e0b;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+        .testimonial-text {
+            color: #334155;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            font-style: italic;
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px solid #dbeafe;
+        }
+        .date {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .cta-button {
+            display: block;
+            margin: 0 auto;
+            background: linear-gradient(to right, #2563eb, #3b82f6);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            font-weight: 500;
+        }
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+        }
+        .cta-button i {
+            margin-left: 8px;
+            transition: transform 0.3s;
+        }
+        .cta-button:hover i {
+            transform: translateX(3px);
+        }
+
+        /* ===== FOOTER ===== */
+        #footer {
+            background: #1a2b3c;
+            color: #eee;
+        }
+        .footer-top {
+            padding: 60px 0 40px;
+        }
+        .footer-top .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .footer-top h2 {
+            color: white;
+            font-size: 1.3rem;
+        }
+        .footer-top hr {
+            width: 50px;
+            height: 2px;
+            background: var(--primary);
+            margin: 10px 0 20px;
+        }
+        .footer-top p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .social a {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 50%;
+            margin-right: 8px;
+            transition: 0.3s;
+        }
+        .social a:hover {
+            background: var(--primary);
+        }
+        .footer-top ul {
+            list-style: none;
+        }
+        .footer-top ul li {
+            margin: 10px 0;
+        }
+        .footer-top ul li a {
+            color: #bbb;
+            transition: 0.3s;
+            margin-right: 8px;
+        }
+        .footer-top ul li a:hover {
+            color: white;
+        }
+        .copyrigth {
+            background: #0f1a24;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #home .navbar nav {
+                flex-direction: column;
+            }
+            #home .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .title h2 {
+                font-size: 1.8rem;
+            }
+            #info .col {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home start -->
+    <header id="home">
+        <div class="navbar">
+            <nav>
+                <a href="#"><img src="https://placehold.co/50x50/4193b3/white?text=Lqahi" class="logo" alt="logo"></a>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#">service</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">centers</a></li>
+                    <li><a href="#">contact us</a></li>
+                    <div class="linkhead"><li><a href="#">Login</a></li></div>
+                </ul>
+            </nav>
+        </div>
+        <div class="home-content">
+            <div class="col">
+                <h1><span class="text-primary">Lqahi</span> in your hands</h1>
+                <p>Protection begins with a decision, and vaccination is<br> your first step toward better health for you and your loved ones.</p>
+                <a href="#" class="btn btn-primary">Learn more</a>
+            </div>
+            <div class="col">
+                <img src="https://placehold.co/600x400/41b3a2/white?text=Vaccination+Safety" alt="section img">
+            </div>
+        </div>
+    </header>
+    <!-- Home end -->
+
+    <!-- About start -->
+    <section id="about">
+        <div class="container">
+            <div class="title">
+                <h2>We Offer Different Services To Improve Your Health</h2>
+                <img src="https://placehold.co/60x60/41b3a2/white?text=Logo" alt="section img">
+                <p>GIVE THE BEST!</p>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h3>Who We Are</h3>
+                    <hr>
+                    <p>We are a web-based platform dedicated to managing childhood vaccinations efficiently and effectively.</p>
+                    <p>Our goal is to ensure that every child receives their inoculations on time by providing parents with the necessary tools.</p>
+                    <div class="list">
+                        <ul>
+                            <li><i class="fa-solid fa-map-location-dot"></i> Health Center Location</li>
+                            <li><i class="fa-solid fa-calendar-days"></i> Vaccination Schedule</li>
+                        </ul>
+                        <ul>
+                            <li><i class="fa-solid fa-bell"></i> Reminder Alerts</li>
+                            <li><i class="fa-solid fa-scroll"></i> Digital Health Certificate</li>
+                        </ul>
+                    </div>
+                </div>
+                <img src="https://placehold.co/500x400/41b3a2/white?text=About+Us" alt="About img">
+            </div>
+        </div>
+    </section>
+    <!-- About end -->
+
+    <!-- info start -->
+    <section id="info">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <i class="fa-solid fa-shield-virus"></i>
+                    <div>
+                        <span>92</span>
+                        <p>Seasonal vaccination campaigns</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <i class="fa-solid fa-hospital"></i>
+                    <div>
+                        <span>392</span>
+                        <p>Number of health centers</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <div>
+                        <span>3468</span>
+                        <p>Number of vaccinated children</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- info end -->
+
+    <main>
+        <!-- Services section -->
+        <section id="services" class="container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+                <p>Comprehensive healthcare solutions for your family</p>
+            </div>
+            <div class="services-container">
+                <a href="#" class="service-box">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Health Centers</h3>
+                    <p>Locate nearby vaccination centers with real-time availability</p>
+                </a>
+                <a href="#" class="service-box">
+                    <i class="fas fa-syringe"></i>
+                    <h3>Vaccinations</h3>
+                    <p>Schedule and track immunization for your children</p>
+                </a>
+                <a href="#" class="service-box">
+                    <i class="fas fa-bullhorn"></i>
+                    <h3>Awareness</h3>
+                    <p>Latest vaccination campaigns and health education</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Help start -->
+        <section id="help">
+            <div class="container">
+                <div class="title">
+                    <h2>We Are Always Ready To Help You & Your Family</h2>
+                    <img src="https://placehold.co/60x60/41b3a2/white?text=Help" alt="section img">
+                    <p>Take Steps To Protect Yourself</p>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <i class="fa-solid fa-house-chimney-user"></i>
+                        <h3>stay at home</h3>
+                        <p>Staying home isn't always easy, but it's vital for protecting your health and others</p>
+                    </div>
+                    <div class="col">
+                        <i class="fa-solid fa-head-side-cough"></i>
+                        <h3>Cover caugh & sneezes</h3>
+                        <p>Dispose of the tissue immediately and wash your hands to prevent germ spread</p>
+                    </div>
+                    <div class="col">
+                        <i class="fa-solid fa-head-side-mask"></i>
+                        <h3>Wear a facemask</h3>
+                        <p>Wearing a mask reduces the spread of diseases, especially in crowded areas</p>
+                    </div>
+                    <div class="col">
+                        <i class="fa-solid fa-hand-sparkles"></i>
+                        <h3>Clean & disinfectant</h3>
+                        <p>Proper handwashing is one of the best ways to prevent diseases.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Help End -->
+
+        <!-- review section start -->
+        <section id="review">
+            <div class="container">
+                <h1 class="heading"><span>"</span>Health awareness<span>"</span></h1>
+                <div class="box-container">
+                    <a href="#" id="btn-review">Learn more</a>
+                </div>
+            </div>
+        </section>
+        <!-- review section end -->
+
+        <!-- Mothers testimonials -->
+        <section class="mothers-testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Mothers' Experiences</h2>
+                    <p class="section-subtitle">Real stories from satisfied moms about our services</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="card-header">
+                            <img src="https://i.imgur.com/J6l19aF.png" alt="Mother's profile" class="profile-img" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=Sarah'">
+                            <div class="user-info">
+                                <h4>Sarah M.</h4>
+                                <div class="stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="testimonial-text">"This website completely changed how I interact with my child. The advice was practical and easy to implement."</p>
+                            <div class="date">January 15, 2025</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="card-header">
+                            <img src="https://i.imgur.com/WCzJDWz.png" alt="Mother's profile" class="profile-img" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=Emily'">
+                            <div class="user-info">
+                                <h4>Emily T.</h4>
+                                <div class="stars">★★★★☆</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="testimonial-text">"The products recommended here are high quality and completely safe for my kids. I recommend this to all moms!"</p>
+                            <div class="date">March 2, 2025</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="card-header">
+                            <img src="https://i.imgur.com/7D7ePnD.png" alt="Mother's profile" class="profile-img" onerror="this.src='https://placehold.co/60x60/3b82f6/white?text=Jessica'">
+                            <div class="user-info">
+                                <h4>Jessica K.</h4>
+                                <div class="stars">★★★★★</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="testimonial-text">"Amazing experience! The customer support was available 24/7 to answer all my questions."</p>
+                            <div class="date">May 10, 2024</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="cta-button">Share Your Experience <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer start -->
+    <footer id="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-1">
+                        <h2>About Us</h2>
+                        <hr>
+                        <p>Dedicated to vaccine awareness, health education, and accessibility. Empowering communities through knowledge and protection</p>
+                        <div class="social">
+                            <a href="#" aria-label="visit facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" aria-label="visit instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" aria-label="visit twitter"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#" aria-label="visit threads"><i class="fa-brands fa-threads"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <h2>Quick Links</h2>
+                        <hr>
+                        <ul>
+                            <li><a href="#"><i class="fa-solid fa-caret-right"></i></a> Home</li>
+                            <li><a href="#"><i class="fa-solid fa-caret-right"></i></a> About</li>
+                            <li><a href="#"><i class="fa-solid fa-caret-right"></i></a> service</li>
+                            <li><a href="#"><i class="fa-solid fa-caret-right"></i></a> Health Center</li>
+                            <li><a href="#"><i class="fa-solid fa-caret-right"></i></a> Contact Us</li>
+                        </ul>
+                    </div>
+                    <div class="col-3">
+                        <h2>Contact Us</h2>
+                        <hr>
+                        <ul>
+                            <li><a href="#"><i class="fa-solid fa-envelope"></i></a> Lqahi@gmail.com</li>
+                            <li><a href="#"><i class="fa-solid fa-phone"></i></a> 0920000000</li>
+                            <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a> +0920000000</li>
+                            <li><a href="#"><i class="fa-solid fa-location-dot"></i></a> Bani Walid_Libya</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyrigth">
+            <p>&copy; 2025 Lqahi. All Rights Reserved</p>
+        </div>
+    </footer>
+    <!-- Footer end -->
+</body>
+</html>
