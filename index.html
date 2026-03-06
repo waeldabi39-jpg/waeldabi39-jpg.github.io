@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المسار التقني | لتكنولوجيا والأنظمة الحديثة</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0e11;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ----- canvas الخلفية (أبطأ) ----- */
+        #backgroundCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* ----- الهيدر اللاصق ----- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11, 14, 17, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 245, 212, 0.2);
+            padding: 0.8rem 2rem;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #00f5d4;
+            text-shadow: 0 0 15px #00f5d4;
+        }
+        .logo i {
+            font-size: 2rem;
+        }
+        /* شعار M مخصص */
+        .logo span {
+            background: #00f5d4;
+            color: #0b0e11;
+            width: 45px;
+            height: 45px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px #00f5d4;
+            margin-left: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.2rem;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0%;
+            height: 2px;
+            background-color: #00f5d4;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px #00f5d4;
+        }
+
+        nav ul li a:hover {
+            color: #00f5d4;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* ----- الأقسام العامة ----- */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* محاذاة النص حسب القسم */
+        .section-right {
+            text-align: right;
+        }
+        .section-center {
+            text-align: center;
+        }
+
+        /* قسم الهيرو */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px #00f5d4;
+            color: #fff;
+        }
+        .hero-content p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #ddd;
+        }
+        .btn {
+            display: inline-block;
+            background: transparent;
+            border: 2px solid #00f5d4;
+            color: #00f5d4;
+            padding: 0.8rem 2.5rem;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px #00f5d480;
+        }
+        .btn:hover {
+            background: #00f5d4;
+            color: #0b0e11;
+            box-shadow: 0 0 30px #00f5d4;
+        }
+
+        /* عناوين الأقسام */
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+            color: #fff;
+            border-bottom: 3px solid #00f5d4;
+            padding-bottom: 0.5rem;
+            text-shadow: 0 0 10px #00f5d4;
+        }
+
+        /* قسم الرؤية والقيم - دائرتان تفاعليتان */
+        .vision-values {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        .vision-circle, .values-circle {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(0, 245, 212, 0.1);
+            border: 3px solid #00f5d4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            box-shadow: 0 0 40px rgba(0,245,212,0.3);
+            transition: all 0.4s ease;
+            cursor: default;
+            backdrop-filter: blur(5px);
+        }
+        .vision-circle:hover, .values-circle:hover {
+            transform: scale(1.1);
+            background: rgba(0, 245, 212, 0.25);
+            box-shadow: 0 0 80px #00f5d4;
+        }
+        .vision-circle h3, .values-circle h3 {
+            font-size: 2.5rem;
+            color: #00f5d4;
+            margin-bottom: 1rem;
+        }
+        .circle-desc {
+            font-size: 1.2rem;
+            color: #fff;
+            opacity: 0;
+            max-height: 0;
+            transition: opacity 0.4s ease, max-height 0.4s ease;
+            pointer-events: none;
+        }
+        .vision-circle:hover .circle-desc, .values-circle:hover .circle-desc {
+            opacity: 1;
+            max-height: 200px;
+        }
+
+        /* بطاقات الخدمات */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .service-card {
+            background: rgba(10, 15, 20, 0.7);
+            backdrop-filter: blur(4px);
+            border: 1px solid #00d9ff;
+            border-radius: 20px;
+            padding: 2rem 1rem;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0 0 15px #00d9ff40;
+        }
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 0 40px #00eaff;
+            border-color: #00eaff;
+        }
+        .service-card i {
+            font-size: 3.5rem;
+            color: #00f5d4;
+            margin-bottom: 1rem;
+        }
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .service-card p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        /* آراء العملاء (بدون صور حقيقية) */
+        .testimonials {
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            padding: 3rem 2rem;
+            margin: 4rem 0;
+            border: 1px solid #00f5d4;
+        }
+        .slider-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            min-height: 250px;
+        }
+        .slider-item {
+            display: none;
+            text-align: center;
+            animation: fade 0.5s;
+        }
+        .slider-item.active {
+            display: block;
+        }
+        .slider-item .avatar {
+            font-size: 5rem;
+            color: #00f5d4;
+            margin-bottom: 1rem;
+        }
+        .slider-item h4 {
+            color: #00f5d4;
+            font-size: 1.5rem;
+        }
+        .stars {
+            color: gold;
+            margin: 0.5rem 0;
+            font-size: 1.3rem;
+        }
+        .slider-btn {
+            background: transparent;
+            border: 2px solid #00f5d4;
+            color: #00f5d4;
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .slider-btn:hover {
+            background: #00f5d4;
+            color: #000;
+        }
+        .prev { left: 0; }
+        .next { right: 0; }
+        .dots {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .dot {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background: #aaa;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .dot.active-dot {
+            background: #00f5d4;
+            box-shadow: 0 0 10px #00f5d4;
+        }
+        @keyframes fade {
+            from {opacity: 0} to {opacity: 1}
+        }
+
+        /* الأسئلة الشائعة (Accordion) */
+        .faq-item {
+            background: rgba(20,30,40,0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid #00f5d4;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            text-align: right;
+        }
+        .faq-question {
+            padding: 1.2rem 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .faq-question:hover {
+            background: rgba(0,245,212,0.1);
+        }
+        .faq-question i {
+            transition: transform 0.3s;
+        }
+        .faq-answer {
+            max-height: 0;
+            padding: 0 2rem;
+            background: rgba(0,0,0,0.2);
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s;
+            color: #ccc;
+            line-height: 1.6;
+            text-align: right;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 1.5rem 2rem;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* شركاؤنا - كاروسيل */
+        .partners-carousel {
+            position: relative;
+            max-width: 900px;
+            margin: 2rem auto;
+            overflow: hidden;
+            min-height: 150px;
+        }
+        .partners-set {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            justify-items: center;
+            align-items: center;
+        }
+        .partners-set.active {
+            display: grid;
+        }
+        .partner-logo {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #00d9ff;
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 180px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00f5d4;
+            transition: 0.3s;
+        }
+        .partner-logo i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .partner-logo:hover {
+            background: #00f5d420;
+            border-color: #00f5d4;
+            transform: scale(1.05);
+        }
+
+        /* نموذج الاتصال */
+        .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            padding: 3rem;
+            border-radius: 30px;
+            border: 1px solid #00f5d4;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #00d9ff;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #00f5d4;
+            box-shadow: 0 0 20px #00f5d4;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 1rem;
+            background: transparent;
+            border: 2px solid #00f5d4;
+            color: #00f5d4;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button[type="submit"]:hover {
+            background: #00f5d4;
+            color: #0b0e11;
+            box-shadow: 0 0 30px #00f5d4;
+        }
+
+        /* فوتر */
+        footer {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            padding: 3rem 2rem 1.5rem;
+            border-top: 1px solid #00f5d4;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 5rem;
+            text-align: right;
+        }
+        .footer-col {
+            flex: 0 1 auto;
+        }
+        .footer-col h4 {
+            color: #00f5d4;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col ul li {
+            margin-bottom: 0.7rem;
+        }
+        .footer-col ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .footer-col ul li a:hover {
+            color: #00f5d4;
+        }
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 2rem;
+        }
+        .social-icons a {
+            color: #00f5d4;
+            transition: 0.3s;
+        }
+        .social-icons a:hover {
+            text-shadow: 0 0 20px #00f5d4;
+            transform: scale(1.2);
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            color: #aaa;
+        }
+
+        /* animations scroll (fade in) */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-up.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* responsive */
+        @media (max-width: 800px) {
+            .header-container {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .vision-values {
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="backgroundCanvas"></canvas>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <span>M</span>
+                <span style="background: none; color: #00f5d4; width: auto; font-size: 1.7rem;">المسار التقني</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#about">من نحن</a></li>
+                    <li><a href="#services">خدماتنا</a></li>
+                    <li><a href="#contact">تواصل معنا</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- الرئيسية -->
+        <section id="home" class="hero fade-up">
+            <div class="hero-content">
+                <h1>الأمن مسؤوليتنا... وثقتكم أولويتنا</h1>
+                <p>نلتزم بتقديم خدمات أمنية متطورة لحماية المجتمع باستخدام أحدث التقنيات والأنظمة الحديثة.</p>
+                <a href="#services" class="btn">تعرف على خدماتنا</a>
+            </div>
+        </section>
+
+        <!-- من نحن (محاذاة يمين) -->
+        <section id="about" class="fade-up section-right">
+            <h2 class="section-title">من نحن</h2>
+            <p style="font-size: 1.3rem; max-width: 900px; margin-bottom: 3rem; color: #ddd;">
+                شركة متخصصة في مجال خدمات البنية التحتية لتقنية المعلومات، كذلك تقديم الاستشارات والتنفيذ. نركز في SSS على تقديم أنظمة الزبائن في أفضل صورة تشغيلية ممكنة.
+            </p>
+            
+            <!-- رؤيتنا وقيمنا على شكل دائرتين -->
+            <div class="vision-values">
+                <div class="vision-circle">
+                    <h3>رؤيتنا</h3>
+                    <div class="circle-desc">أن نكون الشريك الرائد في حلول البنية التحتية التقنية بالمنطقة.</div>
+                </div>
+                <div class="values-circle">
+                    <h3>قيمنا</h3>
+                    <div class="circle-desc">الالتزام، الابتكار، الشفافية، والعمل الجماعي.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- خدماتنا (محاذاة يمين) -->
+        <section id="services" class="fade-up section-right">
+            <h2 class="section-title">خدماتنا</h2>
+            <div class="services-grid">
+                <div class="service-card"><i class="fas fa-video"></i><h3>كاميرات</h3><p>أنظمة مراقبة عالية الدقة</p></div>
+                <div class="service-card"><i class="fas fa-shield-alt"></i><h3>أنظمة حماية</h3><p>حماية متكاملة للمنشآت</p></div>
+                <div class="service-card"><i class="fas fa-microchip"></i><h3>أنظمة ذكية</h3><p>أتمتة وتحكم ذكي</p></div>
+                <div class="service-card"><i class="fas fa-desktop"></i><h3>كمبيوتر</h3><p>أجهزة وملحقاتها</p></div>
+                <div class="service-card"><i class="fas fa-network-wired"></i><h3>شبكات</h3><p>تصميم وتركيب الشبكات</p></div>
+                <div class="service-card"><i class="fas fa-satellite-dish"></i><h3>اتصالات</h3><p>حلول الاتصالات المتكاملة</p></div>
+                <div class="service-card"><i class="fas fa-cash-register"></i><h3>منظومات مبيعات</h3><p>أنظمة نقاط البيع وملحقاتها</p></div>
+            </div>
+        </section>
+
+        <!-- آراء العملاء (وسط) -->
+        <section class="testimonials fade-up section-center">
+            <h2 class="section-title">آراء عملائنا</h2>
+            <div class="slider-container">
+                <button class="slider-btn prev" id="prevTestimonial"><i class="fas fa-chevron-right"></i></button>
+                <div class="slider-item active">
+                    <div class="avatar"><i class="fas fa-user-circle"></i></div>
+                    <h4>أحمد السعدي</h4>
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"احترافية في العمل ودقة في التنفيذ، أنصح بالتعامل معهم."</p>
+                </div>
+                <div class="slider-item">
+                    <div class="avatar"><i class="fas fa-user-circle"></i></div>
+                    <h4>فاطمة الزهراء</h4>
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                    <p>"فريق محترف وسريع في حل المشكلات التقنية."</p>
+                </div>
+                <div class="slider-item">
+                    <div class="avatar"><i class="fas fa-user-circle"></i></div>
+                    <h4>خالد الحربي</h4>
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"خدمات متكاملة للبنية التحتية وبأسعار تنافسية."</p>
+                </div>
+                <button class="slider-btn next" id="nextTestimonial"><i class="fas fa-chevron-left"></i></button>
+            </div>
+            <div class="dots" id="sliderDots">
+                <span class="dot active-dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </section>
+
+        <!-- الأسئلة الشائعة (وسط) -->
+        <section class="fade-up section-center">
+            <h2 class="section-title">الأسئلة الشائعة</h2>
+            <div class="faq-list" style="text-align:right; max-width:900px; margin:0 auto;">
+                <div class="faq-item">
+                    <div class="faq-question">ما هي خدمات البنية التحتية التي تقدمونها؟ <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">نقدم حلول متكاملة تشمل الشبكات، الكاميرات، أنظمة الحماية، الاتصالات، والخوادم.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">هل توفرون استشارات تقنية قبل التنفيذ؟ <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">نعم، نقدم استشارات مجانية لتحديد الاحتياجات ووضع أفضل الحلول المناسبة.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">ما هي مدة تنفيذ مشاريع أنظمة المراقبة؟ <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">تختلف حسب حجم المشروع، لكننا نحرص على التسليم في أسرع وقت مع الحفاظ على الجودة.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">هل تقدمون عقود صيانة بعد التركيب؟ <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">نعم، لدينا عقود صيانة دورية لجميع الأنظمة لضمان استمرارية العمل بكفاءة.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- شركاؤنا (يمين) مع كاروسيل -->
+        <section class="fade-up section-right">
+            <h2 class="section-title">شركاؤنا</h2>
+            <div class="partners-carousel" id="partnersCarousel">
+                <div class="partners-set active" id="set1">
+                    <div class="partner-logo"><i class="fab fa-microsoft"></i> Microsoft</div>
+                    <div class="partner-logo"><i class="fab fa-google"></i> Google</div>
+                    <div class="partner-logo"><i class="fab fa-amazon"></i> AWS</div>
+                </div>
+                <div class="partners-set" id="set2">
+                    <div class="partner-logo"><i class="fas fa-network-wired"></i> Cisco</div>
+                    <div class="partner-logo"><i class="fas fa-laptop"></i> Dell</div>
+                    <div class="partner-logo"><i class="fas fa-print"></i> HP</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- تواصل معنا (وسط) -->
+        <section id="contact" class="fade-up section-center">
+            <h2 class="section-title">تواصل معنا</h2>
+            <div class="contact-form">
+                <form id="contactForm" onsubmit="event.preventDefault(); alert('تم الإرسال (محاكاة)');">
+                    <div class="form-group">
+                        <input type="text" placeholder="الاسم الكامل" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="البريد الإلكتروني" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="رقم الهاتف">
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="5" placeholder="رسالتك..." required></textarea>
+                    </div>
+                    <button type="submit">إرسال</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>المسار التقني</h4>
+                <ul>
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#about">من نحن</a></li>
+                    <li><a href="#services">خدماتنا</a></li>
+                    <li><a href="#contact">اتصل بنا</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="#services">الخدمات</a></li>
+                    <li><a href="#about">الرؤية</a></li>
+                    <li><a href="#contact">الدعم الفني</a></li>
+                    <li><a href="#">الوظائف</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تابعنا</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 جميع الحقوق محفوظة - المسار التقني
+        </div>
+    </footer>
+
+    <script>
+        // ----- 1. خلفية Canvas أبطأ -----
+        const canvas = document.getElementById('backgroundCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let mouseX = 0, mouseY = 0;
+        let speedFactor = 1.0;
+        let time = 0;
+        const waves = [];
+        const waveCount = 4; // أقل للأداء
+
+        for (let i = 0; i < waveCount; i++) {
+            waves.push({
+                amplitude: 30 + i * 10,
+                frequency: 0.001 + i * 0.0005,
+                speed: 0.008 + i * 0.004,  // أبطأ
+                phase: i * 3,
+                color: i % 3 === 0 ? '#00f5d4' : (i % 3 === 1 ? '#00d9ff' : '#00eaff'),
+                offsetY: height * 0.2 + i * 90,
+            });
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX / width;
+            mouseY = e.clientY / height;
+        });
+
+        canvas.addEventListener('click', () => {
+            speedFactor = 1.8; // أقل حدة
+            setTimeout(() => { speedFactor = 1.0; }, 300);
+        });
+
+        function drawWaves() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#0b0e11';
+            ctx.fillRect(0, 0, width, height);
+
+            const mouseInfluenceX = (mouseX - 0.5) * 150;
+            const mouseInfluenceY = (mouseY - 0.5) * 70;
+
+            waves.forEach((w) => {
+                ctx.beginPath();
+                ctx.strokeStyle = w.color;
+                ctx.lineWidth = 1.8;
+                ctx.shadowColor = w.color;
+                ctx.shadowBlur = 15;
+                ctx.globalAlpha = 0.4 + 0.2 * Math.sin(time * 0.2 + w.phase);
+
+                let first = true;
+                for (let x = 0; x < width; x += 25) {
+                    let t = time * w.speed * speedFactor;
+                    let y = w.offsetY + mouseInfluenceY * 0.2;
+                    y += Math.sin(x * w.frequency + t + w.phase) * w.amplitude;
+                    y += Math.cos(x * 0.008 + mouseX * 8) * 8;
+                    let offsetX = x + mouseInfluenceX * 0.4 * Math.sin(x * 0.008);
+
+                    if (first) {
+                        ctx.moveTo(offsetX, y);
+                        first = false;
+                    } else {
+                        ctx.lineTo(offsetX, y);
+                    }
+                }
+                ctx.stroke();
+            });
+
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1.0;
+
+            time += 0.15;  // أقل من السابق (كان 0.5)
+            requestAnimationFrame(drawWaves);
+        }
+        drawWaves();
+
+        // ----- 2. Smooth Scroll -----
+        document.querySelectorAll('nav a, .footer-col a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = href.substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        document.querySelector('.btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // ----- 3. Scroll Animations -----
+        const fadeElements = document.querySelectorAll('.fade-up');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('appear');
+                }
+            });
+        }, { threshold: 0.2 });
+        fadeElements.forEach(el => observer.observe(el));
+
+        // ----- 4. Slider العملاء -----
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slider-item');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.getElementById('prevTestimonial');
+        const nextBtn = document.getElementById('nextTestimonial');
+
+        function showSlide(index) {
+            slides.forEach((s, i) => s.classList.toggle('active', i === index));
+            dots.forEach((d, i) => d.classList.toggle('active-dot', i === index));
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        });
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        });
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                currentSlide = idx;
+                showSlide(currentSlide);
+            });
+        });
+
+        // ----- 5. Accordion -----
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                faqItems.forEach(i => { if (i !== item) i.classList.remove('active'); });
+                item.classList.toggle('active');
+            });
+        });
+
+        // ----- 6. Carousel الشركاء (تبديل كل 3 ثوان) -----
+        const set1 = document.getElementById('set1');
+        const set2 = document.getElementById('set2');
+        let showSet1 = true;
+
+        setInterval(() => {
+            if (showSet1) {
+                set1.classList.remove('active');
+                set2.classList.add('active');
+            } else {
+                set2.classList.remove('active');
+                set1.classList.add('active');
+            }
+            showSet1 = !showSet1;
+        }, 3000);
+    </script>
+</body>
+</html>
